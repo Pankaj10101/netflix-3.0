@@ -1,21 +1,22 @@
-'use client'
+"use client";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   User,
 } from "firebase/auth";
 
-
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { auth } from "../firebase";
+import { auth, provider } from "../firebase";
 import { useRouter } from "next/navigation";
 
 interface IAuth {
   user: User | null;
   signUp: (email: string, password: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
+  signinWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
   error: string | null;
   loading: boolean;
@@ -25,6 +26,7 @@ const AuthContext = createContext<IAuth>({
   user: null,
   signUp: async () => {},
   signIn: async () => {},
+  signinWithGoogle: async () => {},
   logout: async () => {},
   error: null,
   loading: false,
@@ -38,7 +40,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState(null);
-  const [initialLoading, setInitialLoading] = useState(true)
+  const [initialLoading, setInitialLoading] = useState(true);
   const router = useRouter();
 
   useEffect(
@@ -86,6 +88,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       .finally(() => setLoading(false));
   };
 
+  const signinWithGoogle = async () => {
+    setLoading(true);
+    await signInWithPopup(auth, provider).then((userCredential) => {
+      setUser(userCredential.user);
+      router.push("/");
+      setLoading(false);
+    })
+    .catch((error) => alert(error.message))
+    .finally(() => setLoading(false));
+  };
+
   const logout = async () => {
     setLoading(true);
 
@@ -102,6 +115,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       user,
       signUp,
       signIn,
+      signinWithGoogle,
       loading,
       logout,
       error,
