@@ -1,4 +1,4 @@
-'use client'
+
 import { AuthProvider } from "@/hooks/useAuth";
 import "./globals.css";
 import { Inter } from "next/font/google";
