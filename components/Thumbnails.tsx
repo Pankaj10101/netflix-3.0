@@ -27,6 +27,7 @@ function Thumbnail({ movie }: Props) {
         alt=''
         className="rounded-sm object-cover md:rounded"
         layout="fill"
+        priority={true}
       />
     </div>
   )
