@@ -1,5 +1,5 @@
 import { DocumentData } from 'firebase/firestore'
-import Image from 'next/image'
+import Image from 'next/legacy/image'
 import { useRecoilState } from 'recoil'
 import { modalState, movieState } from '../atoms/modalAtoms'
 import { Movie } from '../typescript'

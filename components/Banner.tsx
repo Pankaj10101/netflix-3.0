@@ -1,9 +1,8 @@
 "use client";
 import { Movie } from "@/typescript";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import React, { useEffect, useState } from "react";
 import {FaPlay} from 'react-icons/fa'
-import {HiInformationCircle} from 'react-icons/hi'
 import { baseUrl } from "@/constants/movie";
 import { InformationCircleIcon } from "@heroicons/react/outline";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -18,7 +17,6 @@ const Banner = (randomMovie: Props) => {
   const [currentMovie, setCurrentMovie] = useRecoilState(movieState)
   const showModall = useRecoilValue(modalState)
   const [movie, setMovie] = useState<Movie | null>(null);
-  console.log(randomMovie.randomMovie)
   useEffect(() => {
     setMovie(
      randomMovie.randomMovie
@@ -39,6 +37,7 @@ const Banner = (randomMovie: Props) => {
           alt=""
           layout="fill"
           objectFit="cover"
+          priority={true}
         />
       </div>
 
