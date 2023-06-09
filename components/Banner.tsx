@@ -6,21 +6,31 @@ import {FaPlay} from 'react-icons/fa'
 import {HiInformationCircle} from 'react-icons/hi'
 import { baseUrl } from "@/constants/movie";
 import { InformationCircleIcon } from "@heroicons/react/outline";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { modalState, movieState } from "@/atoms/modalAtoms";
 
 interface Props {
-  netflixOriginals: Movie[];
+  randomMovie: Movie;
 }
 
-const Banner = (netflixOriginals: Props) => {
+const Banner = (randomMovie: Props) => {
+  const [showModal, setShowModal] = useRecoilState(modalState)
+  const [currentMovie, setCurrentMovie] = useRecoilState(movieState)
+  const showModall = useRecoilValue(modalState)
   const [movie, setMovie] = useState<Movie | null>(null);
+  console.log(randomMovie.randomMovie)
   useEffect(() => {
     setMovie(
-      netflixOriginals.netflixOriginals[
-        Math.floor(Math.random() * netflixOriginals.netflixOriginals.length)
-      ]
+     randomMovie.randomMovie
     );
-  }, [netflixOriginals]);
-  console.log(movie);
+  }, [randomMovie]);
+
+  const truncateText = (text: string, maxLength: number) => {
+    if (text.length <= maxLength) {
+      return text;
+    }
+    return text.substr(0, maxLength) + "......";
+  };
   return (
     <div className="flex flex-col space-y-2 py-16 md:space-y-4 lg:h-[65vh] lg:justify-end lg:pb-12">
       <div className="absolute top-0 left-0 -z-10 h-[95vh] w-screen">
@@ -32,11 +42,11 @@ const Banner = (netflixOriginals: Props) => {
         />
       </div>
 
-      <h1 className="text-2xl font-bold md:text-4xl lg:text-7xl">
+      <h1 className="text-2xl font-bold text-white md:text-3xl lg:text-6xl">
         {movie?.title || movie?.name || movie?.original_name}
       </h1>
-      <p className="max-w-xs text-xs text-shadow-md md:max-w-lg md:text-lg lg:max-w-2xl lg:text-2xl">
-        {movie?.overview}
+      <p className="max-w-xs text-xs text-white md:max-w-lg md:text-lg lg:max-w-2xl lg:text-2xl">
+      {movie?.overview && truncateText(movie?.overview, 200)}
       </p>
 
       <div className="flex space-x-3">
@@ -45,10 +55,10 @@ const Banner = (netflixOriginals: Props) => {
         </button>
         <button
           className="bannerButton bg-[gray]/70"
-          // onClick={() => {
-          //   setCurrentMovie(movie)
-          //   setShowModal(true)
-          // }}
+          onClick={() => {
+            setCurrentMovie(movie)
+            setShowModal(true)
+          }}
         >
           More Info <InformationCircleIcon className="h-5 w-5 md:h-8 md:w-8" />
         </button>

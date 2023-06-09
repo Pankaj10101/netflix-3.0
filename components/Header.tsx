@@ -4,10 +4,12 @@ import React, { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { AiFillBell } from "react-icons/ai";
 import Link from "next/link";
+import useAuth from "@/hooks/useAuth";
 type Props = {};
 
 const Header = (props: Props) => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const {logout} = useAuth()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,6 +26,11 @@ const Header = (props: Props) => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+
+  const logOut = async ()=>{
+    await logout()
+  }
   return (
     <header className={`${isScrolled && "bg-[#141414]"}`}>
       <div className="flex items-center space-x-2 md:space-x-10">
@@ -49,13 +56,13 @@ const Header = (props: Props) => {
         <BiSearch className="hidden h-6 w-6 sm:inline" />
         <p className="hidden lg:inline">Kids</p>
         <AiFillBell className="h-6 w-6" />
-        <Link href="/account">
+        <button onClick={logOut}>
           <img
             src="https://rb.gy/g1pwyx"
             alt=""
             className="cursor-pointer rounded"
           />
-        </Link>
+        </button>
       </div>
     </header>
   );
